@@ -1,1 +1,20 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+
 @import "tailwindcss";
+
+@layer base {
+  body {
+    @apply bg-orange-50 text-stone-700 font-sans overflow-hidden;
+    font-family: 'Varela Round', sans-serif;
+  }
+}
+
+/* Custom Animations */
+@keyframes bounce-slow {
+  0%, 100% { transform: translateY(-5%); }
+  50% { transform: translateY(5%); }
+}
+
+.animate-bounce-slow {
+  animation: bounce-slow 3s infinite ease-in-out;
+}

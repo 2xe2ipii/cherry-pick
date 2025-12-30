@@ -1,35 +1,38 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useGameLogic } from './hooks/useGameLogic';
+import { Lobby } from './pages/Lobby';
+import { GameRoom } from './pages/GameRoom';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { room, isConnected } = useGameLogic();
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+  // 1. Loading State (Connecting to Server)
+  if (!isConnected) {
+    return (
+      <div className="h-[100dvh] flex flex-col items-center justify-center bg-orange-50 gap-4">
+        <h1 className="text-4xl font-black text-rose-500 animate-bounce">Cherry Pick 🍒</h1>
+        <div className="text-rose-400 font-bold animate-pulse">
+          Connecting to server...
+        </div>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    );
+  }
+
+  // 2. Routing Logic
+  // If we have a room object, check its status to decide what to show.
+  if (room) {
+    // If the game is actively playing (or showing results/game over), show the Game Room
+    if (room.status === 'PLAYING' || room.status === 'REVEAL' || room.status === 'GAME_OVER') {
+      return <GameRoom room={room} />;
+    }
+
+    // If status is 'LOBBY', the Lobby component handles the "Waiting Room" view
+    // so we fall through to the return below, or we could explicitly return <Lobby /> here.
+    // However, the Lobby component is smart enough to show the "Waiting" view if 'room' exists.
+    return <Lobby />;
+  }
+
+  // 3. Default: Show the Login/Create Room Screen
+  return <Lobby />;
 }
 
-export default App
+export default App;
