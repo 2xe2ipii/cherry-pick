@@ -1,3 +1,5 @@
+// Shared type definitions used across the client.
+
 export type GameStatus = 'LOBBY' | 'PLAYING' | 'REVEAL' | 'GAME_OVER';
 
 export interface Player {
@@ -31,7 +33,7 @@ export interface Room {
   createdAt: number;
 }
 
-// These were missing:
+// Payloads for socket events
 export interface JoinRoomPayload {
   roomId: string;
   name: string;

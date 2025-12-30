@@ -6,15 +6,23 @@ interface NumberPadProps {
   disabled?: boolean;
 }
 
+/**
+ * A numeric keypad for submitting guesses during gameplay.
+ *
+ * Maintains its own input state and enforces simple constraints such as
+ * limiting the value to a maximum of 100 and preventing leading zeros.
+ * The pad emits the number via the onSubmit callback when the check
+ * button is pressed.
+ */
 export const NumberPad: React.FC<NumberPadProps> = ({ onSubmit, disabled }) => {
-  const [input, setInput] = useState<string>("");
+  const [input, setInput] = useState<string>('');
 
   const handleTap = (num: number) => {
     if (disabled) return;
     const newValue = input + num.toString();
     if (Number(newValue) > 100) return; // Cap at 100
-    if (input === "0" && num === 0) return; // No 00
-    if (input === "0" && num > 0) {
+    if (input === '0' && num === 0) return; // No 00
+    if (input === '0' && num > 0) {
       setInput(num.toString());
       return;
     }
@@ -26,18 +34,19 @@ export const NumberPad: React.FC<NumberPadProps> = ({ onSubmit, disabled }) => {
   const handleSubmit = () => {
     if (!input) return;
     onSubmit(Number(input));
-    setInput("");
+    setInput('');
   };
 
   return (
     <div className="w-full max-w-sm mx-auto flex flex-col gap-4 select-none">
-      
       {/* The Display (Floating Numbers) */}
       <div className="h-24 flex items-center justify-center">
-        <span className={`
-          text-7xl font-black transition-all duration-300
-          ${disabled ? 'text-stone-300 scale-90 blur-[2px]' : 'text-rose-500 scale-100'}
-        `}>
+        <span
+          className={`
+            text-7xl font-black transition-all duration-300
+            ${disabled ? 'text-stone-300 scale-90 blur-[2px]' : 'text-rose-500 scale-100'}
+          `}
+        >
           {input || <span className="opacity-20">0</span>}
         </span>
       </div>
@@ -50,8 +59,8 @@ export const NumberPad: React.FC<NumberPadProps> = ({ onSubmit, disabled }) => {
             onClick={() => handleTap(num)}
             disabled={disabled}
             className="
-              h-20 rounded-[2rem] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)] 
-              text-3xl font-black text-stone-600 transition-transform active:scale-90 
+              h-20 rounded-[2rem] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)]
+              text-3xl font-black text-stone-600 transition-transform active:scale-90
               disabled:opacity-50 disabled:active:scale-100 touch-manipulation
             "
           >
@@ -76,7 +85,7 @@ export const NumberPad: React.FC<NumberPadProps> = ({ onSubmit, disabled }) => {
           disabled={disabled}
           className="
             h-20 rounded-[2rem] bg-white shadow-[0_4px_20px_rgba(0,0,0,0.05)]
-            text-3xl font-black text-stone-600 transition-transform active:scale-90 
+            text-3xl font-black text-stone-600 transition-transform active:scale-90
             disabled:opacity-50 disabled:active:scale-100 touch-manipulation
           "
         >

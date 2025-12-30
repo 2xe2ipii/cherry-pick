@@ -8,26 +8,37 @@ interface PlayerCardProps {
   showGuess?: boolean;
 }
 
+/**
+ * Displays a single player's status in the game lobby or during play.
+ *
+ * Highlights the current user and dims eliminated players.  Shows a small
+ * ready indicator when a player has submitted their guess (but the round
+ * hasn't been revealed yet), and optionally reveals the player's guess
+ * when `showGuess` is true.
+ */
 export const PlayerCard: React.FC<PlayerCardProps> = ({ player, isMe, showGuess }) => {
   const isDead = player.lives <= 0;
 
   return (
-    <div className={`
-      relative flex flex-col items-center p-4 rounded-3xl transition-all duration-300
-      ${isMe ? 'bg-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] z-10' : 'bg-white/40 border border-white/60'}
-      ${isDead ? 'opacity-50 grayscale' : ''}
-    `}>
-      
+    <div
+      className={`
+        relative flex flex-col items-center p-4 rounded-3xl transition-all duration-300
+        ${isMe ? 'bg-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] z-10' : 'bg-white/40 border border-white/60'}
+        ${isDead ? 'opacity-50 grayscale' : ''}
+      `}
+    >
       {/* Ready Indicator (Hidden if dead or revealing) */}
       {player.currentGuess !== null && !showGuess && !isDead && (
         <div className="absolute top-2 right-2 w-3 h-3 bg-lime-500 rounded-full shadow-[0_0_10px_rgba(132,204,22,0.6)] animate-pulse" />
       )}
 
       {/* Avatar */}
-      <div className={`
-        w-16 h-16 mb-2 transition-transform duration-500
-        ${player.currentGuess !== null && !showGuess && !isDead ? 'scale-110 -translate-y-1' : 'scale-100'}
-      `}>
+      <div
+        className={`
+          w-16 h-16 mb-2 transition-transform duration-500
+          ${player.currentGuess !== null && !showGuess && !isDead ? 'scale-110 -translate-y-1' : 'scale-100'}
+        `}
+      >
         <img src={player.avatar} alt={player.name} className="w-full h-full object-contain drop-shadow-sm" />
       </div>
 

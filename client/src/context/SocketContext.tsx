@@ -9,6 +9,13 @@ interface SocketContextType {
 
 const SocketContext = createContext<SocketContextType>({ socket: null, isConnected: false });
 
+/**
+ * Establishes and manages a websocket connection to the backend server.
+ *
+ * The provider automatically connects on mount, passing a persistent user
+ * identifier to the server.  It exposes both the Socket instance and a
+ * boolean indicating connection status to consumers.
+ */
 export const SocketProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);

@@ -16,6 +16,14 @@ interface GameContextType {
 
 const GameContext = createContext<GameContextType | null>(null);
 
+/**
+ * Provides game state and actions via context.
+ *
+ * This context listens for socket events to keep the local room
+ * representation up-to-date and exposes helper functions that emit
+ * corresponding events to the server.  Errors emitted by the server
+ * are temporarily displayed and then cleared automatically.
+ */
 export const GameProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { socket } = useSocket();
   const [room, setRoom] = useState<Room | null>(null);

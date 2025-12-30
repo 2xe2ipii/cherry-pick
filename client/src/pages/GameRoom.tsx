@@ -6,6 +6,13 @@ import { NumberPad } from '../components/game/NumberPad';
 import { useSocket } from '../context/SocketContext';
 import { GameLayout } from '../components/layout/GameLayout';
 
+/**
+ * The main play screen showing the current round, players, and input controls.
+ *
+ * Displays room and round information, a grid of players with their avatars
+ * and status, and a number pad for the current user to submit a guess.
+ * Also handles reveal and game over overlays.
+ */
 export const GameRoom: React.FC<{ room: Room }> = ({ room }) => {
   const { actions } = useGameLogic();
   const { socket } = useSocket();
@@ -41,7 +48,6 @@ export const GameRoom: React.FC<{ room: Room }> = ({ room }) => {
       {/* 2. The Arena (Player Grid) */}
       {/* We use flex-1 to fill space, but allow scroll if many players */}
       <div className="flex-1 overflow-y-auto px-6 py-4">
-        
         {/* Result Overlay (Floating) */}
         {isReveal && room.lastResult && (
           <div className="mb-6 bg-white p-6 rounded-[2rem] shadow-xl text-center border-4 border-rose-100 animate-bounce-slow">
@@ -57,10 +63,10 @@ export const GameRoom: React.FC<{ room: Room }> = ({ room }) => {
 
         <div className="grid grid-cols-2 gap-3 pb-24">
           {room.players.map(p => (
-            <PlayerCard 
-              key={p.id} 
-              player={p} 
-              isMe={p.id === socket?.id} 
+            <PlayerCard
+              key={p.id}
+              player={p}
+              isMe={p.id === socket?.id}
               showGuess={isReveal}
             />
           ))}
@@ -68,11 +74,13 @@ export const GameRoom: React.FC<{ room: Room }> = ({ room }) => {
       </div>
 
       {/* 3. The Input Zone (Fixed Bottom) */}
-      <div className={`
-        fixed bottom-0 w-full bg-white/80 backdrop-blur-xl border-t border-white/50 rounded-t-[2.5rem] 
-        shadow-[0_-10px_40px_rgba(0,0,0,0.05)] transition-transform duration-500 ease-spring
-        ${room.status === 'PLAYING' ? 'translate-y-0' : 'translate-y-[120%]'}
-      `}>
+      <div
+        className={`
+          fixed bottom-0 w-full bg-white/80 backdrop-blur-xl border-t border-white/50 rounded-t-[2.5rem]
+          shadow-[0_-10px_40px_rgba(0,0,0,0.05)] transition-transform duration-500 ease-spring
+          ${room.status === 'PLAYING' ? 'translate-y-0' : 'translate-y-[120%]'}
+        `}
+      >
         <div className="p-6 pb-10">
           {myGuess === null ? (
             <NumberPad onSubmit={handleSubmit} />
@@ -85,14 +93,14 @@ export const GameRoom: React.FC<{ room: Room }> = ({ room }) => {
           )}
         </div>
       </div>
-      
+
       {/* Game Over Overlay */}
       {room.status === 'GAME_OVER' && (
         <div className="absolute inset-0 z-50 bg-black/40 backdrop-blur-md flex items-center justify-center p-6">
           <div className="bg-white p-8 rounded-[2.5rem] text-center shadow-2xl w-full max-w-sm">
             <div className="text-5xl mb-4">👑</div>
             <h2 className="text-3xl font-black text-stone-800 mb-6">GAME OVER</h2>
-            <button 
+            <button
               onClick={() => window.location.reload()}
               className="w-full bg-rose-500 text-white py-4 rounded-2xl font-black text-lg shadow-lg shadow-rose-200 active:scale-95 transition-transform"
             >

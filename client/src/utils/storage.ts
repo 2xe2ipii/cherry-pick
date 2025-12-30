@@ -1,3 +1,7 @@
+// A simple utility for storing and retrieving a unique user identifier in
+// localStorage.  The server uses this ID to associate socket connections
+// with the same user across sessions.
+
 const KEY = 'cherry_user_id';
 
 export const getStoredUser = (): string => {

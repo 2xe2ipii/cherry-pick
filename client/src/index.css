@@ -4,6 +4,13 @@
 
 @layer base {
   body {
+    /*
+      Restrict the document to a full‑viewport height with no scroll.
+      This ensures that UI elements stay anchored even when the
+      on‑screen keyboard opens.  If additional vertical space is
+      required, individual containers should handle their own
+      positioning rather than relying on page scroll.
+    */
     @apply bg-orange-50 text-stone-700 font-sans overflow-hidden;
     font-family: 'Varela Round', sans-serif;
   }

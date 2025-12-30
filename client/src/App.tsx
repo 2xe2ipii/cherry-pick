@@ -2,6 +2,13 @@ import { useGameLogic } from './hooks/useGameLogic';
 import { Lobby } from './pages/Lobby';
 import { GameRoom } from './pages/GameRoom';
 
+/**
+ * Root component that chooses between the lobby and the game room.
+ *
+ * Shows a simple connecting screen until the websocket is connected.  Once
+ * connected, it uses the presence of a room and its status to determine
+ * whether to render the lobby or the game room view.
+ */
 function App() {
   const { room, isConnected } = useGameLogic();
 
@@ -17,11 +24,9 @@ function App() {
   // Debugging: Check console to see if status changes to PLAYING
   if (room) {
     console.log('Current Room Status:', room.status);
-    
     if (room.status === 'PLAYING' || room.status === 'REVEAL' || room.status === 'GAME_OVER') {
       return <GameRoom room={room} />;
     }
-    
     return <Lobby />;
   }
 
