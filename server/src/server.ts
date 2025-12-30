@@ -65,6 +65,24 @@ io.on('connection', (socket) => {
       console.log(`❌ Client disconnected: ${socket.id} from ${roomId}`);
     }
   });
+
+  socket.on('join_queue', (payload) => {
+    const room = RoomManager.addToQueue(socket.id, payload.name, payload.avatar);
+    
+    if (room) {
+      // We found a match! Notify both players.
+      room.players.forEach(p => {
+        const pSocket = io.sockets.sockets.get(p.id);
+        if (pSocket) {
+          pSocket.join(room.id);
+          pSocket.emit('room_update', room);
+        }
+      });
+      console.log(`⚔️ Match found: ${room.id} (${room.players[0].name} vs ${room.players[1].name})`);
+    } else {
+      socket.emit('queue_joined'); // Acknowledge wait
+    }
+  });
 });
 
 server.listen(PORT, () => {

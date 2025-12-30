@@ -65,6 +65,10 @@ export const useGameLogic = () => {
       joinRoom,
       startGame,
       submitGuess
-    }
+    },
+    joinQueue: (name: string, avatar: string) => {
+      if (!socket) return;
+      socket.emit('join_queue', { name, avatar });
+    },
   };
 };
