@@ -5,43 +5,43 @@ import { FruitBasket } from './FruitBasket';
 interface PlayerCardProps {
   player: Player;
   isMe?: boolean;
-  showGuess?: boolean; // Only true during reveal phase
+  showGuess?: boolean;
 }
 
 export const PlayerCard: React.FC<PlayerCardProps> = ({ player, isMe, showGuess }) => {
+  const isDead = player.lives <= 0;
+
   return (
     <div className={`
       relative flex flex-col items-center p-4 rounded-3xl transition-all duration-300
-      ${isMe ? 'bg-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] scale-105 z-10' : 'bg-white/60 shadow-sm scale-100'}
-      border-2 ${player.lives === 0 ? 'border-stone-200 opacity-60' : isMe ? 'border-rose-200' : 'border-transparent'}
+      ${isMe ? 'bg-white shadow-[0_8px_30px_rgb(0,0,0,0.12)] z-10' : 'bg-white/40 border border-white/60'}
+      ${isDead ? 'opacity-50 grayscale' : ''}
     `}>
       
-      {/* Status Badge */}
-      {player.currentGuess !== null && !showGuess && player.lives > 0 && (
-        <div className="absolute -top-2 right-4 bg-lime-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-bounce">
-          READY
-        </div>
+      {/* Ready Indicator (Hidden if dead or revealing) */}
+      {player.currentGuess !== null && !showGuess && !isDead && (
+        <div className="absolute top-2 right-2 w-3 h-3 bg-lime-500 rounded-full shadow-[0_0_10px_rgba(132,204,22,0.6)] animate-pulse" />
       )}
 
       {/* Avatar */}
       <div className={`
-        w-20 h-20 rounded-full bg-gradient-to-br from-orange-100 to-rose-50 flex items-center justify-center mb-2 shadow-inner
-        ${player.lives === 0 ? 'grayscale' : ''}
+        w-16 h-16 mb-2 transition-transform duration-500
+        ${player.currentGuess !== null && !showGuess && !isDead ? 'scale-110 -translate-y-1' : 'scale-100'}
       `}>
-        <img src={player.avatar} alt={player.name} className="w-16 h-16 object-contain drop-shadow-md" />
+        <img src={player.avatar} alt={player.name} className="w-full h-full object-contain drop-shadow-sm" />
       </div>
 
       {/* Name */}
-      <h3 className="font-bold text-stone-700 text-lg truncate max-w-[120px]">
+      <h3 className={`font-bold text-sm mb-2 truncate max-w-full ${isMe ? 'text-rose-500' : 'text-stone-600'}`}>
         {player.name} {isMe && '(You)'}
       </h3>
 
       {/* Health */}
       <FruitBasket lives={player.lives} />
 
-      {/* Reveal Number (Only shown at end of round) */}
+      {/* Reveal Number Bubble */}
       {showGuess && player.currentGuess !== null && (
-        <div className="absolute -bottom-4 bg-stone-800 text-white font-black text-xl w-10 h-10 flex items-center justify-center rounded-full shadow-lg border-4 border-orange-50">
+        <div className="absolute -bottom-3 bg-stone-800 text-white font-black text-lg w-10 h-10 flex items-center justify-center rounded-full shadow-xl border-4 border-orange-50 z-20">
           {player.currentGuess}
         </div>
       )}

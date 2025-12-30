@@ -1,16 +1,16 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.tsx'
-import './index.css'
-import { SocketProvider } from './context/SocketContext.tsx'
-import { BrowserRouter } from 'react-router-dom'
+import { StrictMode } from 'react';
+import { createRoot } from 'react-dom/client';
+import './index.css';
+import App from './App';
+import { SocketProvider } from './context/SocketContext';
+import { GameProvider } from './context/GameContext';
 
-ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
-    <BrowserRouter>
-      <SocketProvider>
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <SocketProvider>
+      <GameProvider>
         <App />
-      </SocketProvider>
-    </BrowserRouter>
-  </React.StrictMode>,
-)
+      </GameProvider>
+    </SocketProvider>
+  </StrictMode>
+);
